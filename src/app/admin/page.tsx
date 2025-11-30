@@ -2,32 +2,28 @@
 
 import { useState, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { HealthData } from '@/types'; // CRITICAL: Import HealthData to correctly type the fetched data
-import { faHeartPulse, faTransgender, faClock, faUserGroup, faFaceSmileBeam, faFaceSmile, faFaceMeh, faFaceFrown, faFaceAngry, faBoltLightning, IconDefinition } from '@fortawesome/free-solid-svg-icons'
-
+import { HealthData } from '@/types';
+import { faFaceSmileBeam, faFaceSmile, faFaceMeh, faFaceFrown, faFaceAngry } from '@fortawesome/free-solid-svg-icons'
 
 export default function AdminPage() {
   const router = useRouter();
   
-  // State for form inputs
   const [secret, setSecret] = useState(''); 
-  const [moodValue, setMoodValue] = useState(50); 
+  const [moodValue, setMoodValue] = useState(50)
+  // i present to you: the least convoluted of variable names
+  const [stupidSliderMoodValueThingIDontKnowILowkeyForgotWhatThisIsUsedFor, setStupidSliderMoodValueThingIDontKnowILowkeyForgotWhatThisIsUsedFor] = useState(50)
   const [healthScore, setHealthScore] = useState(3); 
   const [socialBattery, setSocialBattery] = useState(75); 
   const [ratio, setRatio] = useState(50); 
-  
-  // State for Energy (0-100 scale)
   const [energyValue, setEnergyValue] = useState(50);
   
-  const [status, setStatus] = useState<string | null>('Loading current status...'); // Default status for loading
-  const [isLoading, setIsLoading] = useState(true); // Loading flag
+  const [status, setStatus] = useState<string | null>('Loading current status...');
+  const [isLoading, setIsLoading] = useState(true)
 
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
 
-  // Load saved data on component mount
   useEffect(() => {
     fetch('/api/status')
       .then((res) => {
@@ -35,13 +31,12 @@ export default function AdminPage() {
         return res.json();
       })
       .then((data: HealthData) => {
-        // Use the fetched data to set the initial state of ALL sliders
         setMoodValue(data.currentMoodValue || 50);
+        setStupidSliderMoodValueThingIDontKnowILowkeyForgotWhatThisIsUsedFor(data.currentMoodValue || 50)
         setHealthScore(data.mentalHealthScore || 3);
         setSocialBattery(data.socialBattery || 75);
         setRatio(data.dysphoriaEuphoriaRatio || 50);
         
-        // Load saved energy value
         setEnergyValue(data.energyValue || 50);
         
         setStatus(null);
@@ -52,9 +47,8 @@ export default function AdminPage() {
         setStatus('Error loading initial data. Using defaults.');
         setIsLoading(false);
       });
-  }, []); // Empty array ensures this runs once on mount
+  }, []);
 
-  // Handle theme changes (kept separate for clarity)
   useEffect(() => {
     const stored = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
     if (stored) {
@@ -91,29 +85,24 @@ export default function AdminPage() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // Send the password in the headers for verification
         'authorization': secret, 
       },
       body: JSON.stringify({
-        // Send the new numerical values
         currentMoodValue: moodValue, 
         mentalHealthScore: healthScore,
         socialBattery: socialBattery,
         dysphoriaEuphoriaRatio: ratio,
-        // Energy value included in the payload
         energyValue: energyValue,
       }),
     });
 
     if (res.ok) {
       setStatus('Success! Dashboard updated.');
-      // Navigation removed to keep the user on the admin panel
     } else {
       setStatus('Failed. Check password or server status.');
     }
   };
 
-  // Subtle background tint based on mood preview
   const getMoodBg = (value: number): string => {
     if (value >= 80) return "bg-emerald-50 dark:bg-emerald-950/20";
     if (value >= 60) return "bg-blue-50 dark:bg-blue-950/20";
@@ -130,8 +119,33 @@ export default function AdminPage() {
     );
   }
 
+  function cubicEaseOut(t: number) {
+    return 1 - Math.pow(1 - t, 3)
+  }
+
+  function slideMoodValue(target: number) {
+    let starting_value = moodValue
+    let difference = target - starting_value
+    let start_time = performance.now()
+
+    function frame(time: number) {
+      const elapsed = time - start_time
+      const progress = Math.min(elapsed / 1000, 1)
+      const eased = cubicEaseOut(progress)
+
+      setStupidSliderMoodValueThingIDontKnowILowkeyForgotWhatThisIsUsedFor(starting_value + difference * eased)
+      setMoodValue(Math.floor(starting_value + difference * eased))
+
+      if (progress < 1) {
+        requestAnimationFrame(frame)
+      }
+    }
+
+    requestAnimationFrame(frame)
+  }
+
   return (
-    <div className={`min-h-screen ${getMoodBg(moodValue)} p-6 flex items-center justify-center transition-colors duration-[2000ms] ease-in-out`}>
+    <div className={`min-h-screen ${getMoodBg(moodValue)} p-6 flex items-center justify-center transition-colors duration-2000 ease-in-out`}>
       <form onSubmit={handleSubmit} className="w-full max-w-lg bg-stone-50/80 dark:bg-stone-900/80 p-8 rounded border border-stone-300/50 dark:border-stone-700/50 relative">
         
         {/* Theme Toggle Button */}
@@ -171,11 +185,11 @@ export default function AdminPage() {
               min="0" 
               max="100" 
               step="1" 
-              value={moodValue}
-              onChange={(e) => setMoodValue(Number(e.target.value))}
+              value={stupidSliderMoodValueThingIDontKnowILowkeyForgotWhatThisIsUsedFor}
+              onChange={(e) => {setMoodValue(Number(e.target.value)); setStupidSliderMoodValueThingIDontKnowILowkeyForgotWhatThisIsUsedFor(Number(e.target.value))}}
               className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
             />
-            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-[4rem] text-right">{moodValue}</span>
+            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{moodValue}</span>
           </div>
           <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
             <span>Low</span>
@@ -184,27 +198,17 @@ export default function AdminPage() {
         </div>
 
         <div>
-            <label className="block text-xs uppercase tracking-widest mb-3 text-stone-600 dark:text-stone-400 font-light">Mood Presets</label>
-            <div className="flex items-center gap-4">
-                <button className='bg-red-900 w-full h-15 text-2xl rounded mb-5'>
-                    <FontAwesomeIcon icon={faFaceAngry} />
-                </button>
-                <button className='bg-amber-900 w-full h-15 text-2xl rounded mb-5'>
-                    <FontAwesomeIcon icon={faFaceFrown} />
-                </button>
-                <button className='bg-stone-800 w-full h-15 text-2xl rounded mb-5'>
-                    <FontAwesomeIcon icon={faFaceMeh} />
-                </button>
-                <button className='bg-blue-900 w-full h-15 text-2xl rounded mb-5 '>
-                    <FontAwesomeIcon icon={faFaceSmile} />
-                </button>
-                <button className='bg-emerald-900 w-full h-15 text-2xl rounded mb-5 '>
-                    <FontAwesomeIcon icon={faFaceSmileBeam} />
-                </button>
-            </div>
+          <label className="block text-xs uppercase tracking-widest mb-3 text-stone-600 dark:text-stone-400 font-light">Mood Presets</label>
+
+          <div className="flex items-center gap-4">
+            <button className='bg-red-500 w-full h-15 text-2xl rounded mb-5' onClick={() => slideMoodValue(0)}> <FontAwesomeIcon className='text-white dark:text-white' icon={faFaceAngry}  /> </button>
+            <button className='bg-amber-500 w-full h-15 text-2xl rounded mb-5' onClick={() => slideMoodValue(25)}> <FontAwesomeIcon className='text-white dark:text-white' icon={faFaceFrown} /> </button>
+            <button className='bg-stone-400 w-full h-15 text-2xl rounded mb-5' onClick={() => slideMoodValue(50)}> <FontAwesomeIcon className='text-white dark:text-white' icon={faFaceMeh} /> </button>
+            <button className='bg-blue-500 w-full h-15 text-2xl rounded mb-5' onClick={() => slideMoodValue(75)}> <FontAwesomeIcon className='text-white dark:text-white' icon={faFaceSmile} /> </button>
+            <button className='bg-emerald-500 w-full h-15 text-2xl rounded mb-5' onClick={() => slideMoodValue(100)}> <FontAwesomeIcon className='text-white dark:text-white' icon={faFaceSmileBeam} /> </button>
+          </div>
         </div>
 
-        {/* 2. Mental Health Slider (1-5) */}
         <div className="mb-6">
           <label className="block text-xs uppercase tracking-widest mb-3 text-stone-600 dark:text-stone-400 font-light">Mental Health</label>
           <div className="flex items-center gap-4">
@@ -217,7 +221,7 @@ export default function AdminPage() {
               onChange={(e) => setHealthScore(Number(e.target.value))}
               className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
             />
-            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-[4rem] text-right">{healthScore.toFixed(1)}</span>
+            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{healthScore.toFixed(1)}</span>
           </div>
         </div>
         
@@ -234,32 +238,11 @@ export default function AdminPage() {
               onChange={(e) => setSocialBattery(Number(e.target.value))}
               className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
             />
-            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-[4rem] text-right">{socialBattery}</span>
+            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{socialBattery}</span>
           </div>
           <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
             <span>Drained</span>
             <span>Charged</span>
-          </div>
-        </div>
-
-        {/* Energy Level Slider (0-100) */}
-        <div className="mb-6">
-          <label className="block text-xs uppercase tracking-widest mb-3 text-stone-600 dark:text-stone-400 font-light">Energy Level</label>
-          <div className="flex items-center gap-4">
-            <input 
-              type="range" 
-              min="0" 
-              max="100" 
-              step="1" 
-              value={energyValue}
-              onChange={(e) => setEnergyValue(Number(e.target.value))}
-              className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
-            />
-            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-[4rem] text-right">{energyValue}</span>
-          </div>
-          <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
-            <span>Exhausted</span>
-            <span>Vibrant</span>
           </div>
         </div>
 
@@ -276,13 +259,35 @@ export default function AdminPage() {
               onChange={(e) => setRatio(Number(e.target.value))}
               className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
             />
-            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-[4rem] text-right">{ratio}</span>
+            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{ratio}</span>
           </div>
           <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
             <span>Dysphoria</span>
             <span>Euphoria</span>
           </div>
         </div>
+
+        {/* Energy Level Slider (0-100) */}
+        <div className="mb-6">
+          <label className="block text-xs uppercase tracking-widest mb-3 text-stone-600 dark:text-stone-400 font-light">Energy Level</label>
+          <div className="flex items-center gap-4">
+            <input 
+              type="range" 
+              min="0" 
+              max="100" 
+              step="1" 
+              value={energyValue}
+              onChange={(e) => setEnergyValue(Number(e.target.value))}
+              className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
+            />
+            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{energyValue}</span>
+          </div>
+          <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
+            <span>Exhausted</span>
+            <span>Vibrant</span>
+          </div>
+        </div>
+
         {/* Submit Button */}
         <button 
           type="submit" 

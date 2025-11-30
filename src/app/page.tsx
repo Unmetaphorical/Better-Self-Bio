@@ -5,6 +5,7 @@ import { HealthData } from '@/types'
 import Profile from '@/components/profile'
 import Player from '@/components/player'
 import Bio from '@/components/bio'
+import Pronouns from '@/components/pronouns'
 import MetersMenu from '@/components/metersmenu'
 
 function getMoodStatusLabel(value: number): string {
@@ -126,7 +127,11 @@ export default function Dashboard() {
       <div className='flex flex-col gap-10'>
         <Bio fadeIn={fadeIn} />
 
+        <Pronouns fadeIn={fadeIn}/>
+
         <Player fadeIn={fadeIn} />
+
+
       </div>  
     </main>
   )
