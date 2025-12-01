@@ -192,8 +192,8 @@ export default function AdminPage() {
             <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{moodValue}</span>
           </div>
           <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
-            <span>Low</span>
-            <span>High</span>
+            <span>Struggling</span>
+            <span>Great</span>
           </div>
         </div>
 
@@ -205,7 +205,7 @@ export default function AdminPage() {
             <button className='bg-amber-500 w-full h-15 text-2xl rounded mb-5' onClick={() => slideMoodValue(25)}> <FontAwesomeIcon className='text-white dark:text-white' icon={faFaceFrown} /> </button>
             <button className='bg-stone-400 w-full h-15 text-2xl rounded mb-5' onClick={() => slideMoodValue(50)}> <FontAwesomeIcon className='text-white dark:text-white' icon={faFaceMeh} /> </button>
             <button className='bg-blue-500 w-full h-15 text-2xl rounded mb-5' onClick={() => slideMoodValue(75)}> <FontAwesomeIcon className='text-white dark:text-white' icon={faFaceSmile} /> </button>
-            <button className='bg-emerald-500 w-full h-15 text-2xl rounded mb-5' onClick={() => slideMoodValue(100)}> <FontAwesomeIcon className='text-white dark:text-white' icon={faFaceSmileBeam} /> </button>
+            <button className='bg-emerald-500 w-full h-15 text-2xl rounded mb-5' onClick={() => slideMoodValue(100)}> <FontAwesomeIcon className='text-white dark:text-white'icon={faFaceSmileBeam} /> </button>
           </div>
         </div>
 
@@ -221,7 +221,11 @@ export default function AdminPage() {
               onChange={(e) => setHealthScore(Number(e.target.value))}
               className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
             />
-            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{healthScore.toFixed(1)}</span>
+            <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{healthScore}</span>
+          </div>
+          <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
+            <span>Poor</span>
+            <span>Amazing</span>
           </div>
         </div>
         
