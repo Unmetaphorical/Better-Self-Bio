@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { HealthData } from '@/types'
 import Profile from '@/components/profile'
-import Player from '@/components/player'
 import Bio from '@/components/bio'
 import Pronouns from '@/components/pronouns'
 import MetersMenu from '@/components/metersmenu'
@@ -117,7 +116,7 @@ export default function Dashboard() {
   }
 
   return (
-    <main className={`min-h-screen min-w-2/3 ${getMoodBg(data.currentMoodValue)} p-6 flex sm:flex-row items-center sm:items-stretch flex-col gap-10 justify-center transition-colors duration-2000 ease-in-out`}>
+    <main className={`min-h-max flex-stretch min-w-2/3 ${getMoodBg(data.currentMoodValue)} p-6 flex sm:flex-row items-center sm:items-stretch flex-col gap-10 justify-center transition-colors duration-2000 ease-in-out`}>
       <div className='flex flex-col gap-10'>
         <Profile fadeIn={fadeIn} />
 

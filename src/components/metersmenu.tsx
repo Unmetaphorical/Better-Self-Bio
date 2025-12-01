@@ -95,6 +95,8 @@ export default function MetersMenu({ theme, cycleTheme, displayedMood, data, fad
         max={5} 
         icon={faHeartPulse}
         color={getHealthColor(data.mentalHealthScore)} 
+        leftLabel='In Danger'
+        rightLabel='Safe'
       />
 
       <Meter 
