@@ -18,9 +18,9 @@ export default function Profile({ fadeIn }: { fadeIn: boolean }) {
           <p className='text-2xl sm:text-2xl tracking-tighter text-stone-600 dark:text-stone-600 transition-colors duration-2000'>@piper.peaches</p>
           
           <div className='flex gap-3 justify-between text-2xl mx-5 my-3'>
-            <a className='hover:text-blue-500 transition-all duration-200'><FontAwesomeIcon icon={faDiscord} /></a>
+            <a className='hover:text-blue-500 transition-all duration-200' target='_blank' href='https://discord.gg/BN9s7Hv4'><FontAwesomeIcon icon={faDiscord} /></a>
             <a className='hover:text-orange-500 transition-all duration-200' target='_blank' href='https://www.reddit.com/user/Frequent-Bluejay-835/'><FontAwesomeIcon icon={faReddit} /></a>
-            <a className='hover:text-purple-500 transition-all duration-200'><FontAwesomeIcon icon={faInstagram} /></a>
+            <a className='hover:text-purple-500 transition-all duration-200' target='_blank' href='https://instagram.com/piper.peachez'><FontAwesomeIcon icon={faInstagram} /></a>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 {
   "mentalHealthScore": 1,
-  "currentMoodValue": 5,
-  "socialBattery": 50,
-  "dysphoriaEuphoriaRatio": 15,
-  "energyValue": 30,
-  "lastUpdated": "2025-12-01T14:51:39.679Z"
+  "currentMoodValue": 14,
+  "socialBattery": 10,
+  "dysphoriaEuphoriaRatio": 10,
+  "energyValue": 25,
+  "lastUpdated": "2025-12-01T19:19:26.988Z"
 }

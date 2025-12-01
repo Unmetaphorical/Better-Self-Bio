@@ -116,20 +116,29 @@ export default function Dashboard() {
   }
 
   return (
-    <main className={`min-h-max flex-stretch min-w-2/3 ${getMoodBg(data.currentMoodValue)} p-6 flex sm:flex-row items-center sm:items-stretch flex-col gap-10 justify-center transition-colors duration-2000 ease-in-out`}>
-      <div className='flex flex-col gap-10'>
-        <Profile fadeIn={fadeIn} />
+    <main className={`min-h-max ${getMoodBg(data.currentMoodValue)} p-10 flex sm:flex-col items-center flex-col gap-10 justify-center transition-colors duration-2000 ease-in-out`}>
+      <div className='flex flex-col sm:flex-row gap-10'>
+        <div className='flex flex-col gap-10'>
+          <Profile fadeIn={fadeIn} />
 
-        <MetersMenu theme={theme} cycleTheme={cycleTheme} displayedMood={displayedMood} data={data} fadeIn={fadeIn} />
+          <MetersMenu theme={theme} cycleTheme={cycleTheme} displayedMood={displayedMood} data={data} fadeIn={fadeIn} />
+
+          <></>
+        </div>
+
+        <div className='flex flex-col gap-10'>
+          <Bio fadeIn={fadeIn} />
+
+          <Pronouns fadeIn={fadeIn}/>
+
+
+        </div>  
       </div>
-
-      <div className='flex flex-col gap-10'>
-        <Bio fadeIn={fadeIn} />
-
-        <Pronouns fadeIn={fadeIn}/>
-
-
-      </div>  
+      <div className='justify-center flex items-center'>
+        <a href='/admin' className='text-xs text-stone-500 dark:text-stone-500 uppercase tracking-widest mb-4 font-light hover:underline'>
+          Manage Page
+        </a>
+        </div>
     </main>
   )
 }

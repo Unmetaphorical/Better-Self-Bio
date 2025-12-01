@@ -4,7 +4,7 @@ import { useState, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { HealthData } from '@/types';
-import { faFaceSmileBeam, faFaceSmile, faFaceMeh, faFaceFrown, faFaceAngry } from '@fortawesome/free-solid-svg-icons'
+import { faFaceSmileBeam, faFaceSmile, faFaceMeh, faCaretRight, faCaretLeft, faFaceFrown, faFaceAngry } from '@fortawesome/free-solid-svg-icons'
 
 export default function AdminPage() {
   const router = useRouter();
@@ -145,9 +145,9 @@ export default function AdminPage() {
   }
 
   return (
-    <div className={`min-h-screen ${getMoodBg(moodValue)} p-6 flex items-center justify-center transition-colors duration-2000 ease-in-out`}>
-      <form onSubmit={handleSubmit} className="w-full max-w-lg bg-stone-50/80 dark:bg-stone-900/80 p-8 rounded border border-stone-300/50 dark:border-stone-700/50 relative">
-        
+    <div className={`min-h-screen gap-10 sm:flex-row flex-col ${getMoodBg(moodValue)} p-6 flex items-center justify-center transition-colors duration-2000 ease-in-out`}>
+      <div className='flex flex-col gap-10'>
+      <div className='w-full max-w-lg bg-stone-50/80 dark:bg-stone-900/80 p-8 rounded border border-stone-300/50 dark:border-stone-700/50 relative transition-all duration-1000'>
         {/* Theme Toggle Button */}
         <button
           onClick={cycleTheme}
@@ -173,8 +173,8 @@ export default function AdminPage() {
             required 
           />
         </div>
-
-        <div className="h-px bg-stone-300 dark:bg-stone-700 my-6"/>
+      </div> 
+      <form onSubmit={handleSubmit} className="w-full max-w-lg bg-stone-50/80 dark:bg-stone-900/80 p-8 rounded border border-stone-300/50 dark:border-stone-700/50 relative">
 
         {/* 1. Current Mood Slider (0-100) */}
         <div className="mb-6">
@@ -209,6 +209,10 @@ export default function AdminPage() {
           </div>
         </div>
 
+        </form>
+        <form onSubmit={handleSubmit} className="w-full max-w-lg bg-stone-50/80 dark:bg-stone-900/80 p-8 rounded border border-stone-300/50 dark:border-stone-700/50 relative">
+
+
         <div className="mb-6">
           <label className="block text-xs uppercase tracking-widest mb-3 text-stone-600 dark:text-stone-400 font-light">Mental Health</label>
           <div className="flex items-center gap-4">
@@ -221,6 +225,8 @@ export default function AdminPage() {
               onChange={(e) => setHealthScore(Number(e.target.value))}
               className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
             />
+            <button className='bg-stone-700 w-10 text-2xl rounded mb-5'><FontAwesomeIcon icon={faCaretLeft} /></button>
+            <button className='bg-stone-700 w-10 text-2xl rounded mb-5'><FontAwesomeIcon icon={faCaretRight} /></button>
             <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{healthScore}</span>
           </div>
           <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
@@ -242,6 +248,8 @@ export default function AdminPage() {
               onChange={(e) => setSocialBattery(Number(e.target.value))}
               className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
             />
+            <button className='bg-stone-700 w-10 text-2xl rounded mb-5'><FontAwesomeIcon icon={faCaretLeft} /></button>
+            <button className='bg-stone-700 w-10 text-2xl rounded mb-5'><FontAwesomeIcon icon={faCaretRight} /></button>
             <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{socialBattery}</span>
           </div>
           <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
@@ -263,6 +271,8 @@ export default function AdminPage() {
               onChange={(e) => setRatio(Number(e.target.value))}
               className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
             />
+            <button className='bg-stone-700 w-10 text-2xl rounded mb-5'><FontAwesomeIcon icon={faCaretLeft} /></button>
+            <button className='bg-stone-700 w-10 text-2xl rounded mb-5'><FontAwesomeIcon icon={faCaretRight} /></button>
             <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{ratio}</span>
           </div>
           <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
@@ -284,6 +294,8 @@ export default function AdminPage() {
               onChange={(e) => setEnergyValue(Number(e.target.value))}
               className="w-full h-px bg-stone-300 dark:bg-stone-700 rounded appearance-none cursor-pointer accent-stone-800 dark:accent-stone-400"
             />
+            <button className='bg-stone-700 w-10 text-2xl rounded mb-5'><FontAwesomeIcon icon={faCaretLeft} /></button>
+            <button className='bg-stone-700 w-10 text-2xl rounded mb-5'><FontAwesomeIcon icon={faCaretRight} /></button>
             <span className="font-bold text-2xl text-stone-900 dark:text-stone-100 min-w-16 text-right">{energyValue}</span>
           </div>
           <div className="flex justify-between text-xs text-stone-500 dark:text-stone-500 mt-2 tracking-wider">
@@ -299,7 +311,7 @@ export default function AdminPage() {
         >
           Update Status
         </button>
-
+          
         {/* Status Message */}
         {status && (
           <div className={`mt-4 text-center text-xs p-3 rounded border tracking-wider ${
@@ -313,6 +325,13 @@ export default function AdminPage() {
           </div>
         )}
       </form>
+      <div className='justify-center flex items-center'>
+        <a href='/' className='text-xs text-stone-500 dark:text-stone-500 uppercase tracking-widest mb-4 font-light hover:underline'>
+          Return Home
+        </a>
+      </div>
+    </div>
+
     </div>
   );
 }
