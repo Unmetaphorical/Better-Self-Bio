@@ -129,8 +129,6 @@ export default function Dashboard() {
 
         <Pronouns fadeIn={fadeIn}/>
 
-        <Player fadeIn={fadeIn} />
-
 
       </div>  
     </main>
